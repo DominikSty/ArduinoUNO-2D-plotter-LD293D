@@ -14,11 +14,12 @@
 
 int check = 12;
 
-int XYdelay = 13; // 5 // 12
+int XYdelay = 12; // 5 // 12
 void stepForwardX();
 void stepBackwardX();
 void stepForwardY();
 void stepBackwardY();
+void MoveTo(int x, int y);
 
 void StepXmotorX(int steps);
 void StepYmotorX(int steps);
@@ -32,9 +33,19 @@ void writeServo(int angle);
 void penUP();
 void penDOWN();
 
+// Sterowanie planszą
+int plate_matrix_x = 0;
+int plate_matrix_y = 0;
+
+int plate_matrix_x_max = 55;
+int plate_matrix_y_max = 60;
+
+int current_x = 0;
+int current_y = 0;
 
 void setup() {
-  //pinMode(check, INPUT);
+  Serial.println("Hello");
+  pinMode(check, INPUT);
 
   // Ustawienie pinów jako wyjścia
   pinMode(InX1, OUTPUT);
@@ -48,25 +59,31 @@ void setup() {
 
   pinMode(SERVO_PIN, OUTPUT);  // Ustaw pin jako wyjście
   penUP();
-  //analogWrite(11, 230);
+
+  pinMode(11, OUTPUT);
+  
+  analogWrite(11, 0); // Fan start (0-255)
+  
+  // MoveTo(0, 0);
+  
 
 }
 
 
 void loop() {
 
-  // if(digitalRead(check) == LOW){
-  //   analogWrite(11, 0); //cooling=0;
-  // }else{
-  //   analogWrite(11, 230); //cooling
-  // }
+  if(digitalRead(check) == LOW){
+    analogWrite(11, 0); //cooling=0;
+  }else{
+    analogWrite(11, 230); //cooling
+  }
 
-  penDOWN();
-  StepXmotorX(10);
-  StepYmotorY(10);
-  StepYmotorX(10);
-  StepXmotorY(10);
-  penUP();
+  // penDOWN();
+  // StepXmotorX(10);
+  // StepYmotorY(10);
+  // StepYmotorX(10);
+  // StepXmotorY(10);
+  // penUP();
   //delay(1000);
 
 }
@@ -214,4 +231,33 @@ void writeServo(int angle) {
   digitalWrite(SERVO_PIN, LOW);
   // Poczekaj na zakończenie cyklu PWM (typowy okres to 20 ms)
   delayMicroseconds(20000 - duty_cycle);
+}
+
+void MoveTo(int x, int y) {
+  // Sprawdź, czy współrzędne znajdują się w dopuszczalnym zakresie
+  if (x >= 0 && x <= plate_matrix_x_max && y >= 0 && y <= plate_matrix_y_max) {
+    // Oblicz różnicę między aktualnym położeniem a docelowym położeniem
+    int dx = x - current_x;
+    int dy = y - current_y;
+
+    // Wykonaj przesunięcie w osi X
+    if (dx > 0) {
+      StepXmotorX(dx); // Przesunięcie w prawo
+    } else if (dx < 0) {
+      StepYmotorX(abs(dx)); // Przesunięcie w lewo
+    }
+
+    // Wykonaj przesunięcie w osi Y
+    if (dy > 0) {
+      StepYmotorY(dy); // Przesunięcie w dół
+    } else if (dy < 0) {
+      StepXmotorY(abs(dy)); // Przesunięcie w górę
+    }
+
+    // Zaktualizuj aktualne położenie
+    current_x = x;
+    current_y = y;
+  } else {
+    Serial.println("Współrzędne poza zakresem!");
+  }
 }
