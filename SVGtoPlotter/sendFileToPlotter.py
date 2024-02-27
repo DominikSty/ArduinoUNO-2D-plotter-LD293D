@@ -14,27 +14,22 @@ time.sleep(2)
 try:
     with open('commands.txt', 'r') as file:
         for line in file:
-            komenda = line.strip()
-            status = ''
-            try:
-                arduino.write(komenda.encode())
-                print("Sent: ", komenda)
-                
-                while status != 'OK':
-                    data = arduino.readline()
-                    if data:
-                        status = data.decode().rstrip()
-                        print("Received: ", status)
-                
-                print("Command executed successfully.")
-                print("--------------------")
+            command = line.strip()  # Read the next line from the file and remove whitespace from the beginning and end
+            arduino.write(command.encode() + b';')  # Send the command with a line break (;)
+            print("Sent: ", command)
             
-            except Exception as e:
-                print("An error occurred:", str(e))
-                break  # Stop execution if there's an error
+            status = ''
+            while status != 'OK':
+                data = arduino.readline()
+                if data:
+                    status = data.decode().rstrip()
+                    print("Received: ", status)
+        
+        print("All commands executed successfully.")
+        print("--------------------")
 
-except KeyboardInterrupt:
-    print("\nInterrupted by the user.")
+except Exception as e:
+    print("An error occurred:", str(e))
 
 finally:
     # Close the connection

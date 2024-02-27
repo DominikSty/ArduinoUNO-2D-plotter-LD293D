@@ -34,5 +34,5 @@ except KeyboardInterrupt:
     print("\nPrzerwano przez użytkownika.")
 
 finally:
-    # Zakończenie połączenia
+    # End the call
     arduino.close()
