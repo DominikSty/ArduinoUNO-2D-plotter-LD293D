@@ -17,6 +17,25 @@ The designed 3D model presented in the figure below shows the general appearance
 
 <img src="https://github.com/DominikSty/ArduinoUNO-2D-plotter-LD293D/assets/101213292/3f76e6a2-6764-4c43-96f2-bd0ee4a5ef7c" width="800">
 
+# RUN PROJECT
+### Uploading to arduino
+Upload all files in ```/src/``` directory
+
+### Start drawing
+1. Create a ```.svg``` file with ```<path>``` which contain information about the beginning and end of the drawn line. 
+2. Convert the ```.svg``` file to code that the plotter program can understand using the ```SVGtoPlotter/convertSVGtoPloterCode.py``` file (default filename is my.svg)
+3. Start uploading your code with ```SVGtoPlotter/sendFileToPlotter.py```
+4. Congratulations, you did it!
+
+# Requirements
+1. Environment for uploading to Arduino (I use VSCode + PlatformIO extensions)
+2. Python version min. 3.10.12 + package: 
+    + pyserial
+    + xml.etree.ElementTree
+    + re
+3. C++ library: 
+    + Arduino.h, 
+    + MemoryFree.h
 
 # TODO in near future:
 - Create GUI app to convert image to g-code
