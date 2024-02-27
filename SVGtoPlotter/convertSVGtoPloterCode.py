@@ -12,6 +12,21 @@ count = 0
 
 instructions = []
 
+
+def write_to_file(filename, commands):
+    try:
+        # Otwieranie pliku w trybie zapisu (tworzy nowy plik lub nadpisuje istniejący)
+        with open(filename, 'w') as file:
+            # Zapisanie kolejnych linii do pliku
+            for command in commands:
+                file.write(command + '\n')
+        # print("Plik", filename, "został zaktualizowany.")
+    except Exception as e:
+        print("Wystąpił błąd podczas zapisywania do pliku:", str(e))
+
+filename = 'commands.txt'
+lines = []
+
 # Przeszukiwanie elementów "path"
 for path in root.iter('path'):
     # Pobieranie atrybutu "d" i wypisywanie
@@ -59,7 +74,8 @@ for symbol in instructions:
     
     # Jeśli instrukcja nie zaczyna się od "M" i istnieje poprzednia instrukcja, łączymy punkty
     if instr != "M" and prev_instruction is not None:
-        print("penDOWN();")
+        print("penDOWN")
+        lines.append("penDOWN")
         # Łączymy punkty symbolem '#'
         x1 = prev_x
         y1 = prev_y
@@ -76,16 +92,20 @@ for symbol in instructions:
             if 0 <= x1 < 56 and 0 <= y1 < 56:
                 if x1 == x2 and y1 == y2:
                     matrix[y1][x1] = '#'  # Rysuj punkt docelowy
-                    print(f"MoveTo({x1},{y1});")
+                    print(f"M({x1},{y1});")
+                    lines.append(f'M({x1},{y1});')
                     break  # Zakończ pętlę po osiągnięciu punktu docelowego
                 elif x1 == x2 or y1 == y2:
                     matrix[y1][x1] = '#'
-                    print(f"MoveTo({x1},{y1});")
+                    print(f"M({x1},{y1});")
+                    lines.append(f'M({x1},{y1});')
                 else:
                     matrix[y1][x1] = '#'
-                    print(f"MoveTo({x1},{y1});")
+                    print(f"M({x1},{y1});")
+                    lines.append(f'M({x1},{y1});')
                     matrix[y1 + sy][x1] = '#'
-                    print(f"MoveTo({x1},{y1 + sy});")
+                    print(f"M({x1},{y1 + sy});")
+                    lines.append(f'M({x1},{y1 + sy});')
             e2 = 2 * err
             if e2 > -dy:
                 err -= dy
@@ -93,7 +113,8 @@ for symbol in instructions:
             if e2 < dx:
                 err += dx
                 y1 += sy
-        print("penUP();")    
+        print("penUP")
+        lines.append("penUP")
     
     # Zapisujemy aktualną instrukcję i współrzędne jako poprzednie
     prev_instruction = instr
@@ -104,3 +125,5 @@ for symbol in instructions:
 for row in matrix:
     print(' '.join(row))
 
+lines.append("M(0,0);") # MoveTo(0,0) - start position
+write_to_file(filename, lines)

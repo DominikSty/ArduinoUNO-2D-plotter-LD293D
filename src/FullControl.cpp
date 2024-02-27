@@ -1,53 +1,58 @@
 #include <Arduino.h>
 
 
-// Definicje pinów dla silnika krokowego X
+// Pin definition for stem motor X (SM15L)
 #define InX1 2
-#define InX2 4
 #define InX3 3
+#define InX2 4
 #define InX4 5
-// Definicje pinów dla silnika krokowego Y
+// Pin definition for stem motor Y (SM15L)
 #define InY1 7
-#define InY2 9
 #define InY3 8
+#define InY2 9
 #define InY4 10
+// Pin definition for stem motor Z (SG90)
+#define SERVO_PIN 6
+// Pin definition for Fan cooling
+#define Fan 11 
 
-int check = 12;
 
-int XYdelay = 12; // 5 // 12
-void stepForwardX();
-void stepBackwardX();
-void stepForwardY();
-void stepBackwardY();
-void MoveTo(int x, int y);
+// Variable definitions
+int check = 12;         // Temporary check key input for rotate Fan
+boolean status = false; // SerialPort status
+int XYdelay = 12;       // Delay for end motor rotate (5 | 12)
+int penMaxUP = 35;      //To max high pen = small number
+int penMaxDOWN = 55;    // To max low pen = more number
+  // Sterring matrix
+int plate_matrix_x = 0;
+int plate_matrix_y = 0;
+int plate_matrix_x_max = 55;
+int plate_matrix_y_max = 60;
+int current_x = 0;
+int current_y = 0;
+String komenda= "";
 
+
+// Function definitions
 void StepXmotorX(int steps);
 void StepYmotorX(int steps);
 void StepXmotorY(int steps);
 void StepYmotorY(int steps);
-
-#define SERVO_PIN 6  // Definicja pinu, do którego podłączony jest silnik SG90
-int penMaxDOWN = 55; // więcej = niżej
-int penMaxUP = 35; //mniej = wyżej
 void writeServo(int angle);
+void stepForwardX();
+void stepBackwardX();
+void stepForwardY();
+void stepBackwardY();
 void penUP();
 void penDOWN();
+void MoveTo(int x, int y);
 
-// Sterowanie planszą
-int plate_matrix_x = 0;
-int plate_matrix_y = 0;
-
-int plate_matrix_x_max = 55;
-int plate_matrix_y_max = 60;
-
-int current_x = 0;
-int current_y = 0;
 
 void setup() {
-  Serial.println("Hello");
-  pinMode(check, INPUT);
+  // Set serial port
+  Serial.begin(9600);
 
-  // Ustawienie pinów jako wyjścia
+  // Set output pins
   pinMode(InX1, OUTPUT);
   pinMode(InX2, OUTPUT);
   pinMode(InX3, OUTPUT);
@@ -56,26 +61,27 @@ void setup() {
   pinMode(InY2, OUTPUT);
   pinMode(InY3, OUTPUT);
   pinMode(InY4, OUTPUT);
+  pinMode(SERVO_PIN, OUTPUT);
+  pinMode(Fan, OUTPUT);
+  pinMode(check, INPUT); // temporary pins for key input
 
-  pinMode(SERVO_PIN, OUTPUT);  // Ustaw pin jako wyjście
-  penUP();
-
-  pinMode(11, OUTPUT);
-  
-  analogWrite(11, 0); // Fan start (0-255)
-  
+  // Setup for starting work
+  penUP();             // For start pen to high position
+  analogWrite(Fan, 0); // Turn off fan (Fan start (0-255))
   // MoveTo(0, 0);
   
 
 }
 
+int parametr1 = 0;
+int parametr2 = 0;
 
 void loop() {
 
   if(digitalRead(check) == LOW){
-    analogWrite(11, 0); //cooling=0;
+    analogWrite(Fan, 0); //cooling=0;
   }else{
-    analogWrite(11, 230); //cooling
+    analogWrite(Fan, 230); //cooling
   }
 
   // penDOWN();
@@ -84,7 +90,53 @@ void loop() {
   // StepYmotorX(10);
   // StepXmotorY(10);
   // penUP();
-  //delay(1000);
+  // delay(1000);
+
+
+  if(Serial.available() > 0){
+    while(Serial.available() > 0 && status != true){
+      komenda = Serial.readStringUntil('\n');
+      komenda.trim();
+        
+      if(komenda.startsWith("M")) { // Sprawdź czy komenda zaczyna się od "M"
+        int pozycjaPrzecinka = komenda.indexOf(','); // Znajdź pozycję przecinka
+        if(pozycjaPrzecinka != -1 && komenda.length() > pozycjaPrzecinka + 1) { // Upewnij się, że znaleziono przecinek i są znaki po nim
+          String parametr1_str = komenda.substring(2, pozycjaPrzecinka); // Pobierz pierwszy parametr
+          String parametr2_str = komenda.substring(pozycjaPrzecinka + 1); // Pobierz drugi parametr
+
+          parametr1 = parametr1_str.toInt(); // Konwertuj pierwszy parametr na liczbę
+          parametr2 = parametr2_str.toInt(); // Konwertuj drugi parametr na liczbę
+
+          komenda = "MoveTo";
+          status = true;
+        }
+
+      }else if (komenda.equals("penUP") || komenda.equals("penDOWN")) {
+        status = true;
+      }
+      }
+      status = false;
+
+      // Sprawdzenie czy komenda to "wlacz" i wykonanie odpowiednich działań
+      if (komenda == "penUP") {
+        penUP();
+        Serial.println("OK");
+      }
+
+      if (komenda == "penDOWN") {
+        penDOWN();
+        Serial.println("OK");
+      }
+
+      // Sprawdzenie czy komenda to "MoveTo" i wykonanie odpowiednich działań
+      if (komenda == "MoveTo") {
+        MoveTo(parametr1,parametr2);
+        Serial.println("OK");
+      }
+
+      // Wyzerowanie komendy po przetworzeniu
+      komenda = "";
+    }
 
 }
 
