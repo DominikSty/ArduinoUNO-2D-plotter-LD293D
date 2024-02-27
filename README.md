@@ -21,5 +21,5 @@ The designed 3D model presented in the figure below shows the general appearance
 # TODO in near future:
 - Create app to convert image to g-code
 - implement functionality of g-code interpreter 
-- curret step is 4*motor step - chagne
+- current step is 4*motor step - chagne
 - modify function to draw line
