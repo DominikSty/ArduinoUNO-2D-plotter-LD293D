@@ -1,21 +1,14 @@
 <svg width="55" height="55">
   <!-- House -->
-  <!-- <path d="M 9,20 L 27,2" fill="none" stroke="black" />
-  <path d="M 27,2 L 45,20" fill="none" stroke="black" />
-  <path d="M 45,20 L 9,20" fill="none" stroke="black" />
-  <path d="M 9,20 L 9,45" fill="none" stroke="black" />
-  <path d="M 9,45 L 45,45" fill="none" stroke="black" />
-  <path d="M 45,45 L 45,20" fill="none" stroke="black" /> -->
-
-
   <path d="M 9,20 L 27,2 L 45,20 L 9,20 L 9,45 L 45,45 L 45,20" fill="none" stroke="black" />
 
   <!-- Door -->
-  <!-- <path d="M 24,45 L 24,35" fill="none" stroke="black" />
-  <path d="M 24,35 L 30,35" fill="none" stroke="black" />
-  <path d="M 30,35 L 30,45" fill="none" stroke="black" />
+  <path d="M 24,45 L 24,35 L 30,35 L 30,45" fill="none" stroke="black" />
+  <path d="M 25,40 L 26,40 L 26,41" fill="none" stroke="black" />
 
-  <path d="M 25,40 L 26,40 L 26,41" fill="none" stroke="black" /> -->
-  <!-- <path d="M 26,40 L 26,41" fill="none" stroke="black" /> -->
+  <!-- Window -->
+  <path d="M 13,23 L 23,23 L 23,32 L 13,32 L 13,23" fill="none" stroke="black" />
+  <path d="M 18,23 L 18,32" fill="none" stroke="black" />
+  <path d="M 13,28 L 23,28" fill="none" stroke="black" />
   
 </svg>

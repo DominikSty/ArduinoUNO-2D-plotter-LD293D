@@ -150,6 +150,8 @@ change_list.append(lines[-1])
 lines = change_list
 
 write_to_file(filename, lines)
+
+
 print("Plotter code:\n", lines)
 
 # Division into lines after X commands
