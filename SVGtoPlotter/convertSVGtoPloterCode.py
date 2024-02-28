@@ -52,7 +52,7 @@ for path in root.iter('path'):
         y_coordinate = d_value_find_elements[2].strip()
         instructions.append([instruction, x_coordinate, y_coordinate])
 
-print(instructions)
+print("Instructions:\n", instructions)
 
 matrix = [[' ' for _ in range(56)] for _ in range(56)]  # Initializing an empty matrix
 prev_instruction = None
@@ -74,7 +74,7 @@ for symbol in instructions:
     
     # If the statement does not start with "M" and there is a previous statement, we combine the dots
     if instr != "M" and prev_instruction is not None:
-        print("penDOWN;")
+        # print("penDOWN;")
         lines.append("penDOWN;")
         # We connect the points with the '#' symbol
         x1 = prev_x
@@ -92,19 +92,19 @@ for symbol in instructions:
             if 0 <= x1 < 56 and 0 <= y1 < 56:
                 if x1 == x2 and y1 == y2:
                     matrix[y1][x1] = '#'  # Draw the target point
-                    print(f'M({y1},{x1});')
+                    # print(f'M({y1},{x1});')
                     lines.append(f'M({y1},{x1});')
                     break  # End the loop when you reach your destination point
                 elif x1 == x2 or y1 == y2:
                     matrix[y1][x1] = '#'
-                    print(f'M({y1},{x1});')
+                    # print(f'M({y1},{x1});')
                     lines.append(f'M({y1},{x1});')
                 else:
                     matrix[y1][x1] = '#'
-                    print(f'M({y1},{x1});')
+                    # print(f'M({y1},{x1});')
                     lines.append(f'M({y1},{x1});')
                     matrix[y1 + sy][x1] = '#'
-                    print(f'M({y1 + sy},{x1});')
+                    # print(f'M({y1 + sy},{x1});')
                     lines.append(f'M({y1 + sy},{x1});')
             e2 = 2 * err
             if e2 > -dy:
@@ -113,7 +113,7 @@ for symbol in instructions:
             if e2 < dx:
                 err += dx
                 y1 += sy
-        print("penUP;")
+        # print("penUP;")
         lines.append("penUP;")
     
     # Save the current instruction and coordinates as previous ones
@@ -122,14 +122,13 @@ for symbol in instructions:
     prev_y = y
 
 # Matrix display
+print("\nView picture:\n")
 for row in matrix:
     print(' '.join(row))
 
 lines.append("M(0,0);") # MoveTo(0,0) - start position
 
 
-
-print(lines)
 # Stores the resulting instructions
 change_list = []
 
@@ -149,12 +148,9 @@ while i < len(lines) - 1:
 # Add the last item of the list to the result
 change_list.append(lines[-1])
 lines = change_list
-# Displaying the result
-# print(wynik)
-
 
 write_to_file(filename, lines)
-
+print("Plotter code:\n", lines)
 
 # Division into lines after X commands
 
@@ -173,7 +169,3 @@ with open(filename, 'w') as file:
         # Adding a newline after every X ';'
         if (i + 1) % commands_count == 0:
             file.write('\n')
-
-
-
-

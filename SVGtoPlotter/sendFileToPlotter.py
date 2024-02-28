@@ -2,7 +2,7 @@ import serial
 import time
 
 # Set SerialPort
-port = '/dev/ttyACM2' 
+port = '/dev/ttyACM0' 
 baudrate = 9600
 
 # Init connection
