@@ -22,10 +22,9 @@ The designed 3D model presented in the figure below shows the general appearance
 Upload all files in ```/src/``` directory
 
 ### Start drawing
-1. Create a ```.svg``` file with ```<path>``` which contain information about the beginning and end of the drawn line. 
-2. Convert the ```.svg``` file to code that the plotter program can understand using the ```SVGtoPlotter/convertSVGtoPloterCode.py``` file (default filename is my.svg)
-3. Start uploading your code with ```SVGtoPlotter/sendFileToPlotter.py```
-4. Congratulations, you did it!
+1. Create a ```.svg``` file with ```<path>``` which contain information about the beginning and end of the drawn line (```M``` and ```L```). 
+2. Start APP with python ```SVGtoPlotter/UploadToPlotterAPP.py```
+3. Select port, open svg and start print - Congratulations, you did it!
 
 # Requirements
 1. Environment for uploading to Arduino (I use VSCode + PlatformIO extensions)
