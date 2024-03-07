@@ -22,22 +22,34 @@ The designed 3D model presented in the figure below shows the general appearance
 Upload all files in ```/src/``` directory
 
 ### Start drawing
-1. Create a ```.svg``` file with ```<path>``` which contain information about the beginning and end of the drawn line (```M``` and ```L```). 
-2. Start APP with python ```SVGtoPlotter/UploadToPlotterAPP.py```
-3. Select port, open svg and start print - Congratulations, you did it!
+1. Start APP with python ```desktopAPP/APP_DrawSVG.py``` and create a ```.svg``` file (draw some lines and click "Save" button). 
+2. Start APP with python ```desktopAPP/APP_UploadToPlotter.py``` and select port, open svg and start print.
+3. Congratulations, you did it!
 
 # Requirements
-1. Environment for uploading to Arduino (I use VSCode + PlatformIO extensions)
-2. Python version min. 3.10.12 + package: 
+Part list for plotter:
+- Arduino UNO R3 (with Atmega 382p)
+- 2x L293D
+- 2x SM15L
+- 1x ServoMotor SG90
+- some metal parts for creating frame and housing
+
+
+Application for desktop:
+
+1. System: Any Linux with GNOME (etc. Ubuntu, PopOS, ...)
+2. Environment for uploading to Arduino (I use VSCode + PlatformIO extensions)
+3. Python version min. 3.10.12 + package: 
     + pyserial
     + xml.etree.ElementTree
     + re
-3. C++ library: 
+    + gi.require_version('Gtk', '3.0')
+4. C++ library: 
     + Arduino.h, 
     + MemoryFree.h
 
 # TODO in near future:
-- Create GUI app to convert image to g-code
+- Create GUI app to convert image to g-code (done)
 - implement functionality of g-code interpreter (done)
-- current step is 4*motor step - chagne
+- current step is 4*motor step - chagne in future
 - modify function to draw line

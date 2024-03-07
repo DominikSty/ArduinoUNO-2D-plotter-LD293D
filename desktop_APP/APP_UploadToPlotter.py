@@ -8,10 +8,10 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 
 
-class ArduinoDeviceList(Gtk.Window):
+class AppUploadToPlotter(Gtk.Window):
 
     def __init__(self):
-        Gtk.Window.__init__(self, title="Arduino Device List")
+        Gtk.Window.__init__(self, title="APP Upload To Plotter")
         self.set_default_size(550, 480)
         self.set_resizable(False)
         self.svgPath = None
@@ -430,7 +430,7 @@ class ArduinoDeviceList(Gtk.Window):
         addTextLine.insert_at_cursor("Disconnected from Plotter.\n")
 
 
-win = ArduinoDeviceList()
+win = AppUploadToPlotter()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()
